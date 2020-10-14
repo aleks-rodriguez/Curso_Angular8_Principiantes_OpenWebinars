@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CorreoComponent } from '../correo/correo.component';
 
 @Component({
   selector: 'app-nuevo-correo',
@@ -9,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class NuevoCorreoComponent implements OnInit {
   nuevoCorreo: FormGroup;
   submitted = false;
+  @Input() correo: any;
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -18,6 +20,13 @@ export class NuevoCorreoComponent implements OnInit {
       cuerpo: ['', [Validators.required, Validators.minLength(10)]],
       destinatario: ['', [Validators.required, Validators.email]],
     });
+
+    if(this.correo != undefined) {
+      this.nuevoCorreo.patchValue({
+        titulo : 'RE :' + this.correo.titulo,
+        destinatario : this.correo.emisor
+      });
+    }
   }
 
   onSubmit() {
