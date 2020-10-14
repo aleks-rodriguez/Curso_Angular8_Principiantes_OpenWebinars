@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CorreoComponent } from '../correo/correo.component';
 
 @Component({
   selector: 'app-nuevo-correo',
@@ -11,6 +10,7 @@ export class NuevoCorreoComponent implements OnInit {
   nuevoCorreo: FormGroup;
   submitted = false;
   @Input() correo: any;
+  @Output() accionRealizada: EventEmitter<any> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -50,5 +50,6 @@ export class NuevoCorreoComponent implements OnInit {
   onReset() {
     this.submitted = false;
     this.nuevoCorreo.reset();
+    this.accionRealizada.emit();
   }
 }
