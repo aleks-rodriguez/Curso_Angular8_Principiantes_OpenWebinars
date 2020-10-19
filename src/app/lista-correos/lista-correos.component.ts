@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CorreoComponent } from '../correo/correo.component';
+import { GmailService} from 'src/app/gmail.service';
 
 @Component({
   selector: 'app-lista-correos',
@@ -9,44 +9,57 @@ import { CorreoComponent } from '../correo/correo.component';
 export class ListaCorreosComponent implements OnInit {
 
   correos: any[];
-  responder: boolean;
-  correoAResponder: any;
 
-  constructor() {
-    const correo1 = {
-      titulo: "Titulo del 1",
-      cuerpo: `Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email
-        Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email,
-        Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email`,
-      emisor: 'correoEmisor1@openWebinar.inv',
-      destinatario: 'correoReceptor@openWebinar.inv',
-      leido: true
-    };
-    const correo2 = {
-      titulo: "Titulo del 2",
-      cuerpo: `Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email
-        Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuerpo del Email, Cuer`,
-      emisor: 'correoEmisor2@openWebinar.inv',
-      destinatario: 'correoReceptor@openWebinar.inv',
-      leido: true
-    };
-    this.correos = [];
-    this.correos.push(correo1);
-    this.correos.push(correo2);
-    this.responder = false;
+  constructor(private gmail: GmailService) {
+    
   }
 
   ngOnInit(): void {
+    this.getRecibidos();
   }
 
   clickResponder(correo) {
-    //this.responder = !this.responder;
-    //this.correoAResponder = correo;
     correo.responder = !correo.responder;
   }
 
   accionRespuestaRapida(correo) {
     correo.responder = false;
   }
+
+  getRecibidos() {
+    this.gmail.getRecibidos().subscribe(
+      (response) => {
+        const mensajes = response.messages;
+
+        mensajes.forEach(element => {
+          this.getMensaje(element.id);
+        });
+      },      (error) => this.error(error)
+      );
+    }
+  
+    getMensaje(id: string){
+      this.gmail.getMessage(id).subscribe(
+        (response) => {
+          const emisor = response.payload.headers.find(e => e.name === "From");
+          const subject = response.payload.headers.find(e => e.name === "Subject");
+  
+          const mensage = {
+            id: response.id,
+            cuerpo: response.snippet,
+            emisor: emisor? emisor.value : undefined,
+            titulo: subject? subject.value : undefined,
+          };
+          this.correos.push(mensage);
+        },
+        (error) => this.error(error)
+      );
+    }
+
+  error(error){
+    console.warn("ERROR");
+  }
+
+
 
 }

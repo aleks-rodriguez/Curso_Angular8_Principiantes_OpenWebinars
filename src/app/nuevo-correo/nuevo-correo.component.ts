@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {AvisosService} from 'src/app/avisos.service';
+import { AvisosService } from 'src/app/avisos.service';
+import { GmailService } from 'src/app/gmail.service';
 @Component({
   selector: 'app-nuevo-correo',
   templateUrl: './nuevo-correo.component.html',
@@ -12,7 +13,7 @@ export class NuevoCorreoComponent implements OnInit {
   @Input() correo: any;
   @Output() accionRealizada: EventEmitter<any> = new EventEmitter();
 
-  constructor(private formBuilder: FormBuilder, private servicioAvisos: AvisosService) { }
+  constructor(private formBuilder: FormBuilder, private servicioAvisos: AvisosService, private gmail: GmailService) { }
 
   ngOnInit() {
     this.nuevoCorreo = this.formBuilder.group({
@@ -21,27 +22,36 @@ export class NuevoCorreoComponent implements OnInit {
       destinatario: ['', [Validators.required, Validators.email]],
     });
 
-    if(this.correo != undefined) {
+    if (this.correo != undefined) {
       this.nuevoCorreo.patchValue({
-        titulo : 'RE :' + this.correo.titulo,
-        destinatario : this.correo.emisor
+        titulo: 'RE :' + this.correo.titulo,
+        destinatario: this.correo.emisor
       });
     }
   }
 
   onSubmit() {
     this.submitted = true;
-    
-    if(this.nuevoCorreo.invalid)
-      return;
-  
-      let correo = this.nuevoCorreo.value;
-      correo.leido = false;
-      correo.destinatario = 'correoEmisor1@openWebinar.inv';
 
-      alert("Correo enviado \nEliminamos el formulario");
-      this.onReset();
-      this.servicioAvisos.showMessage('Correo enviado a ${correo.emisor}');
+    if (this.nuevoCorreo.invalid)
+      return;
+
+    let correo = this.nuevoCorreo.value;
+    const texto = correo.cuerpo;
+    const destinatario = correo.destinatario;
+    const asunto = correo.titulo;
+
+    alert("Correo enviado \nEliminamos el formulario");
+    this.onReset();
+    this.gmail.sendMessage(texto, destinatario, asunto).subscribe(
+      (response) => {
+        console.log("respuesta envio", response);
+        this.servicioAvisos.showMessage(`Correo enviado a ${correo.destinatario}`);
+      },
+      (error) => {
+        this.servicioAvisos.showMessage(`Fallo en el envio`);
+      }
+    );
   }
 
   get formulario() {
@@ -54,7 +64,7 @@ export class NuevoCorreoComponent implements OnInit {
     this.accionRealizada.emit();
   }
 
-  cancel(){
+  cancel() {
     this.onReset();
     this.servicioAvisos.showMessage("Envio cancelado");
   }
