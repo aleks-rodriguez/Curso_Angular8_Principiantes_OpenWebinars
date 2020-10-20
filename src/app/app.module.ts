@@ -7,7 +7,7 @@ import { CorreoComponent } from './correo/correo.component';
 import { ListaCorreosComponent } from './lista-correos/lista-correos.component';
 import { NuevoCorreoComponent } from './nuevo-correo/nuevo-correo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AvisosComponent } from './avisos/avisos.component';
+//import { AvisosComponent } from './avisos/avisos.component';
 import { CorreosRecibidosComponent } from './correos-recibidos/correos-recibidos.component';
 import { LoginComponent } from './login/login.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -17,6 +17,13 @@ import { EnviarComponent } from './enviar/enviar.component';
 import { HomeComponent } from './home/home.component';
 import { VisualizarCorreoComponent } from './visualizar-correo/visualizar-correo.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatButtonModule} from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "454423071724-g0e9ita6vqqqnorno5qo6rge45ur5mhr.apps.googleusercontent.com",
@@ -38,7 +45,7 @@ let gapiClientConfig: NgGapiClientConfig = {
     CorreoComponent,
     ListaCorreosComponent,
     NuevoCorreoComponent,
-    AvisosComponent,
+    //AvisosComponent,
     CorreosRecibidosComponent,
     LoginComponent,
     MenuComponent,
@@ -56,7 +63,15 @@ let gapiClientConfig: NgGapiClientConfig = {
       provide: NG_GAPI_CONFIG,
       useValue: gapiClientConfig
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatDividerModule,
+    MatDividerModule,
+    MatInputModule,
+    MatTableModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

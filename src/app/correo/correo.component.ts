@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-correo',
   templateUrl: './correo.component.html',
@@ -15,11 +15,13 @@ export class CorreoComponent implements OnInit {
       emisor: "",
       destinatario: ""
     }
-   }
+  }
 
   ngOnInit() {
     const datosRecibidos = this.route.snapshot.paramMap.get('correo');
-    this.correo = JSON.parse(datosRecibidos);
+    if (datosRecibidos) {
+      this.correo = JSON.parse(datosRecibidos);
+    }
   }
 
 }
