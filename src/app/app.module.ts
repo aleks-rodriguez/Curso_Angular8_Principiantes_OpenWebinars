@@ -16,15 +16,7 @@ import { MenuComponent } from './menu/menu.component';
 import { EnviarComponent } from './enviar/enviar.component';
 import { HomeComponent } from './home/home.component';
 import { VisualizarCorreoComponent } from './visualizar-correo/visualizar-correo.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import {MaterialModule} from 'src/app/material/material.module';
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "454423071724-g0e9ita6vqqqnorno5qo6rge45ur5mhr.apps.googleusercontent.com",
   discoveryDocs: ["https://analyticsreporting.googleapis.com/$discovery/rest?version=v4"],
@@ -63,15 +55,7 @@ let gapiClientConfig: NgGapiClientConfig = {
       provide: NG_GAPI_CONFIG,
       useValue: gapiClientConfig
     }),
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatToolbarModule,
-    MatDividerModule,
-    MatDividerModule,
-    MatInputModule,
-    MatTableModule,
-    MatSnackBarModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
